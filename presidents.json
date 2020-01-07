@@ -1,0 +1,37 @@
+[
+    {
+        "Name":"Ronald Regan",
+        "img":"regan.png",
+        "yrs":8
+    },
+    {
+        "Name":"Gerorge H. W. Bush",
+        "img":"regan.png",
+        "yrs":4
+    },
+    {
+        "Name":"Bill Clinton",
+        "img":"regan.png",
+        "yrs":8
+    },
+    {
+        "Name":"George W. Bush",
+        "img":"regan.png",
+        "yrs":8
+    },
+    {
+        "Name":"Barrack Obama",
+        "img":"regan.png",
+        "yrs":8
+    },
+    {
+        "Name":"Donald Trump",
+        "img":"regan.png",
+        "yrs":4
+    },
+    {
+        "Name":"Forecast",
+        "img":"regan.png",
+        "yrs":8
+    }
+]
