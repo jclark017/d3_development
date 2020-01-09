@@ -5,10 +5,10 @@ body {
   font: 10px sans-serif;
 }
 .y.axisRight text {
-    fill: red;
+    fill: steelblue;
 }
 .y.axisLeft text {
-    fill: steelblue;
+    fill: red;
 }
 .axis path,
 .axis line {
@@ -16,22 +16,41 @@ body {
   stroke: #000;
   shape-rendering: crispEdges;
 }
-.bar1 {
-  fill: steelblue;
+.bar1.good {
+  fill: rgb(37, 158, 0);
 }
-.bar2 {
-  fill: steelblue;
+.bar1.bad {
+  fill: rgb(184, 5, 5);
+}
+.bar2.good {
+  fill: rgb(37, 158, 0);
+  opacity: .5
+}
+.bar2.bad {
+  fill: rgb(184, 5, 5);
   opacity: .5
 }
 .barPres {
   fill: steelblue;
   opacity: .2
 }
+.barPres.Republican {
+  fill: rgb(202, 90, 90);
+  opacity: .1
+}
+.barPres.Democrat {
+  fill: rgb(38, 64, 211);
+  opacity: .1
+}
+.barPres.None {
+  fill: steelblue;
+  opacity: .1
+}
 .bar1:hover {
-  fill: orange;
+  fill: steelblue;
 }
 .bar2:hover {
-  fill: orange;
+  fill: steelblue;
 }
 .x.axis path {
   display: none;
@@ -72,6 +91,8 @@ body {
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 <script>
+
+// Set margins for main chart
 var margin = {top: 0, right: 80, bottom: 0, left: 80},
     width = 1400 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom,
@@ -90,7 +111,7 @@ var xAxis = d3.svg.axis()
   //Get data
 d3.json("presidents.json", function(errorPres, presData) {
 var xPres = d3.scale.ordinal()
-    .domain(presData.map(function (d) { return d.Name; }))
+    .domain(presData.map(function (d) { return d.Name; }));
     /*.range(presData.map(function (d, i) {
         iPres += d.yrs*10;
         console.log(d3.sum(presData, function(d) { return d.yrs; }));
@@ -101,7 +122,7 @@ var xPres = d3.scale.ordinal()
 var xAxisPres = d3.svg.axis()
         .scale(xPres)
         .orient("bottom");
-
+        
 // tooltip variable 
 var tip = d3.tip()
   .attr('class', 'd3-tip')
@@ -189,22 +210,33 @@ d3.csv("budget.csv", type, function(error, dataProto) {
 
   svg.append("g")
     .attr("class", "x axis")
-    .attr("transform", "translate(-14," + (chartHeight - yScale(d3.min(data, function(d) { return d.ChangeFromPreceding_Net; }))) + ")") //" + chartHeight + ")")
+    .attr("transform", "translate(-12," + (chartHeight - yScale(d3.min(data, function(d) { return d.ChangeFromPreceding_Net; }))) + ")") //" + chartHeight + ")")
     .call(xAxis)
     .selectAll("text")
     .attr("y", -14)
     .attr("x", 25)
     .attr("dy", ".35em")
-    .attr("transform", "rotate(90)");
+    .attr("transform", "rotate(90)")
 
-  svg.append("g")
+
+  // paint the axis for presidents
+  let xAxisPresPaint = svg.append("g")
     .attr("class", "xPres axis")
-    .attr("transform", "translate(-14," + (chartHeight - yScale(d3.min(data, function(d) { return d.ChangeFromPreceding_Net; }))) + ")") //" + chartHeight + ")")
+    .attr("transform", "translate(14," + (chartHeight - yScale(d3.min(data, function(d) { return d.ChangeFromPreceding_Net; }))) + ")") //" + chartHeight + ")")
     .call(xAxisPres)
     .selectAll("text")
     .attr("y", -14)
-    .attr("x", 25)
+    .attr("x", 50)
+    .style("text-anchor", "middle")
     .attr("dy", ".35em");
+
+  svg.selectAll("g.xPres g.tick text")
+     .attr("font-size","10");
+  svg.selectAll("g.xPres g.tick line")
+     .remove();
+  svg.selectAll("g.xPres path")
+     .remove();
+
 
   svg.append("g")
 	  .attr("class", "y axis axisLeft")
@@ -230,14 +262,39 @@ d3.csv("budget.csv", type, function(error, dataProto) {
     .style("font-size","18px")
     .attr("transform", "rotate(-90)")
     .text("Total Annual Deficit (Billions)");
+
+    // Paint President background bars
+  iPres = 0
+  barsPres = svg.selectAll(".barPres").data(presData).enter();
+  barsPres.append("rect")
+        .attr("class", "barPres")
+        .attr("class", function(d) { 
+            return "barPres " + d.party; 
+          })
+        .attr("x", function(d, i) { if (i == 0) {return xPres(d.Name)+13} else {return xPres(d.Name)+14}; })
+        .attr("y", 600) //animated later
+        .attr("width", function(d, i) { 
+          if (i == 0) {return xPres.range()[i + 1]-xPres.range()[i]-1} else {return xPres.range()[i + 1]-xPres.range()[i]-1}; 
+          //xPres(d.Name[i+1]);
+          
+        })
+        .attr("height",100) //animated later
     
+  // Paint the deficit change bars
   bars = svg.selectAll(".bar").data(data).enter();
   bars.append("rect")
       .attr("class", function(d) {
-        if (d.Year > "2019") {
-          return "bar2";
+        //Set a class value for good or bad
+        if (d.ChangeFromPreceding_Net > 0) {
+          var chg = "bad";
         } else {
-          return "bar1";
+          var chg = "good";
+        }
+
+        if (d.Year > "2019") {
+          return "bar2 " + chg;
+        } else {
+          return "bar1 " + chg;
         }
       }
     )
@@ -249,30 +306,17 @@ d3.csv("budget.csv", type, function(error, dataProto) {
       .on('mouseover', tip.show)
       .on('mouseout', tip.hide);
 
-// Paint President background bars
-iPres = 0
-barsPres = svg.selectAll(".barPres").data(presData).enter();
-barsPres.append("rect")
-      .attr("class", "barPres")
-      .attr("x", function(d) { return xPres(d.Name); })
-      .attr("y", 600) //animated later
-      .attr("width", function(d, i) { 
-        return xPres.range()[i + 1]-xPres.range()[i]
-        //xPres(d.Name[i+1]);
-        
-      })
-      .attr("height",100) //animated later
-
 var lineFunction = d3.svg.line()
         .x(function(d) { return x(d.Year) + x.rangeBand()/2; })
         .y(function(d) { return yAxisScaleRight(d.Net); })
 
+  // Draw the deficit line
   svg.append("path")
     .datum(data)
     .attr("fill", "none")
     .attr("class", "line")
     .attr("id", "actual")
-    .attr("stroke", "red")
+    .attr("stroke", "steelblue")
     .attr("stroke-width", 5)
     .style("opacity","0") //Set invisible initially
     .attr("d", lineFunction(data.filter(function(d) {
@@ -280,6 +324,7 @@ var lineFunction = d3.svg.line()
     }))
         )
 
+  // Draw the forecast line
   svg.append("path")
     .datum(data)
     .attr("fill", "none")
@@ -287,20 +332,28 @@ var lineFunction = d3.svg.line()
     .attr("id", "forecast")
     .style("stroke-dasharray", ("3, 3"))  
     .style("opacity","0") //Set invisible initially
-    .attr("stroke", "red")
+    .attr("stroke", "steelblue")
     .attr("stroke-width", 5)
     .attr("d", lineFunction(data.filter(function(d) {
       return d.Year > "2019";
     }))
         );
   
-  //animation for rectangles
+  //Animation for Presidents
+  svg.selectAll("rect.barPres")
+      .transition()
+      .duration(500) 
+      .attr("y", 0)
+      .attr("height", height/.71) 
+      .delay(function(d,i){ return(i*100)});
+
+  //Animation for rectangles
   svg.selectAll("rect.bar1, rect.bar2")
       .transition()
       .duration(500) 
       .attr("y", function(d) { return chartHeight - Math.max(0,yScale(d.ChangeFromPreceding_Net)); })
       .attr("height", function(d) { return Math.abs(yScale(d.ChangeFromPreceding_Net)); }) 
-      .delay(function(d,i){ return(i*100)});
+      .delay(function(d,i){ if (i == 0) {return(1000)} else {return(1000+(i*100))}});
     
   // Then highlight the main line to be fully visable and give it a thicker stroke
   d3.select("#actual").style("opacity","1").style("stroke-width",5);
@@ -315,13 +368,14 @@ var lineFunction = d3.svg.line()
     .attr("stroke-dashoffset", totalLength)
     // Then the following lines transition the line so that the gap is hidden...
     .transition()
+    .delay(1000)
     .duration(3400)
     .ease("quad") //Try linear, quad, bounce... see other examples here - http://bl.ocks.org/hunzy/9929724
     .attr("stroke-dashoffset", 0);
 
   d3.selectAll("#forecast")
     .transition()
-    .delay(3400)
+    .delay(4400)
     .duration(1000)
     .ease("quad") //Try linear, quad, bounce... see other examples here - http://bl.ocks.org/hunzy/9929724
     .style("opacity","1");
@@ -335,4 +389,22 @@ function type(d) {
 }
 
 
+</script>
+<script>
+  
+// Set margins for main chart
+var margin = {top: 0, right: 80, bottom: 0, left: 80},
+    width = 1400 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom,
+    chartHeight = 600,
+
+ 
+// Year x Axis
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1);
+
+var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom");
+   
 </script>

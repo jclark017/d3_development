@@ -2,36 +2,43 @@
     {
         "Name":"Ronald Regan",
         "img":"regan.png",
-        "yrs":8
+        "yrs":8,
+        "party":"Republican"
     },
     {
         "Name":"Gerorge H. W. Bush",
         "img":"regan.png",
-        "yrs":4
+        "yrs":4,
+        "party":"Republican"
     },
     {
         "Name":"Bill Clinton",
         "img":"regan.png",
-        "yrs":8
+        "yrs":8,
+        "party":"Democrat"
     },
     {
         "Name":"George W. Bush",
         "img":"regan.png",
-        "yrs":8
+        "yrs":8,
+        "party":"Republican"
     },
     {
         "Name":"Barrack Obama",
         "img":"regan.png",
-        "yrs":8
+        "yrs":8,
+        "party":"Democrat"
     },
     {
         "Name":"Donald Trump",
         "img":"regan.png",
-        "yrs":4
+        "yrs":4,
+        "party":"Republican"
     },
     {
         "Name":"Forecast",
         "img":"regan.png",
-        "yrs":8
+        "yrs":8,
+        "party":"None"
     }
 ]
