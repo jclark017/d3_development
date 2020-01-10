@@ -1,12 +1,12 @@
 [
     {
-        "Name":"Ronald Regan",
+        "Name":"Ronald Reagan",
         "img":"regan.png",
         "yrs":8,
         "party":"Republican"
     },
     {
-        "Name":"Gerorge H. W. Bush",
+        "Name":"George H. W. Bush",
         "img":"regan.png",
         "yrs":4,
         "party":"Republican"
@@ -24,7 +24,7 @@
         "party":"Republican"
     },
     {
-        "Name":"Barrack Obama",
+        "Name":"Barack Obama",
         "img":"regan.png",
         "yrs":8,
         "party":"Democrat"

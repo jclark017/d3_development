@@ -16,7 +16,7 @@ function generatePresidentChart()
         .domain(presData.map(function (d) { return d.Name; }))
         .rangeRoundBands([0, width], .1);
 
-    var yAxisScale = d3.scale.linear().domain([800, -300]).range([0, height]);
+    var yAxisScale = d3.scale.linear().domain([250, -150]).range([0, height]);
     var yAxisLeft = d3.svg.axis().scale(yAxisScale).ticks(16).orient("left");
 
     var xAxisPres = d3.svg.axis()
@@ -44,7 +44,7 @@ function generatePresidentChart()
         .style("font-size","14px")
         .attr("transform", "rotate(-90)")
         .attr("dy", "-2em")
-        .text("Average Budget Deficit(Surplus)");
+        .text("Average Annual Change in Deficit(Surplus)");
 
     // paint the x axis for presidents
     let xAxisPresPaint = svg.append("g")
@@ -52,27 +52,28 @@ function generatePresidentChart()
         .attr("transform", "translate(" + margin.left +","+ (height + margin.bottom) + ")")
         .call(xAxisPres)
         .selectAll("text")
-        .attr("y", -14)
+        .attr("y", 0)
         .attr("x", 50)
         .attr("transform", "rotate(-90)")
         .style("text-anchor", "middle")
         .attr("dy", ".35em");
 
-    // Paint President background bars
+    // Paint President bars
     iPres = 0
     barsPres = svg.selectAll(".barPresident").data(presData).enter();
     barsPres.append("rect")
           .attr("class", function(d) { 
               return "barPresident " + d.party; 
             })
-          .attr("x", function(d, i) {return xPres(d.Name);})
+          .attr("x", function(d, i) {return xPres(d.Name)+margin.left;})
           .attr("y", function(d) {return yAxisScale(0)}) //animated later
           .attr("width", function(d) {return xPres.rangeBand();})
           .attr("height",0) //animated later
-        });
+          .attr("id",function(d,i) {return trimPresidentName(xPres.domain()[i]);})
+
 
     // fetch Budget data to paint bars
-    d3.csv("budget.csv", type, function(error, dataProto) {
+    d3.csv("budget.csv", function(error, dataProto) {
       //Convert data formats
       var data = dataProto.map(
         function (currentObject) {
@@ -82,21 +83,44 @@ function generatePresidentChart()
             Preceding_Net: parseFloat(currentObject.Preceding_Net),
             ChangeFromPreceding_Net: parseFloat(currentObject.ChangeFromPreceding_Net),
             Change_Net: parseFloat(currentObject.Change_Net),
-            TotalDebt: parseFloat(currentObject.TotalDebt)
+            TotalDebt: parseFloat(currentObject.TotalDebt),
+            PresidentParty: currentObject.PresidentParty,
+            SenateMajorityParty: currentObject.SenateMajorityParty,
+            HouseMajorityParty: currentObject.HouseMajorityParty,
+            President: trimPresidentName(currentObject.President),
+            SuperMajority: currentObject.SuperMajority
           };
         }
       );    
 
-
+    console.log(data);
     //TODO Next. Use the below samples as a guide to paint the bars for president incrementally as the 
-    // years go by.
-    
+    // years go by. Write functions to traverse the object and sum things up.
+
+    function calcPresScale(presName) {
+      return yAxisScale(d3.sum(
+          data.filter(d => trimPresidentName(d.President) === presName),
+                d => d.ChangeFromPreceding_Net)
+        /
+        d3.count(
+          data.filter(d => trimPresidentName(d.President) === presName),
+                d => d.ChangeFromPreceding_Net)
+    )
+    };
+    console.log(
+     //yAxisScale(0)
+      calcPresScale(trimPresidentName("BillClinton"))
+    )
+
+
     //Animation for Presidents
-    svg.selectAll("rect.barPres")
+    svg.selectAll("rect.barPresident")
     .transition()
     .duration(500) 
-    .attr("y", 0)
-    .attr("height", height/.71) 
+    .attr("y", function(dy, i) {      
+        return Math.min(yAxisScale(0),calcPresScale(trimPresidentName(xPres.domain()[i])));
+      })
+    .attr("height", function(d, i) {return Math.abs(yAxisScale(0) - calcPresScale(trimPresidentName(xPres.domain()[i])))}) 
     .delay(function(d,i){ return(i*100)});
 
     //Animation for rectangles
@@ -107,4 +131,11 @@ function generatePresidentChart()
       .attr("height", function(d) { return Math.abs(yScale(d.ChangeFromPreceding_Net)); }) 
       .delay(function(d,i){ if (i == 0) {return(1000)} else {return(1000+(i*100))}});
       });
+    });
+    function trimPresidentName (presName) {
+      // Trim president name of spaces and periods
+      if (typeof presName !== 'undefined') {
+        return presName.replace(/\s/g, '').replace(/\./g, "");
+      }
+    }
 }
