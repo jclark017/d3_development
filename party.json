@@ -1,0 +1,14 @@
+[
+    {
+        "party":"Republican",
+        "yrs":"24"
+    },
+    {
+        "party":"Democrat",
+        "yrs":"16"
+    },
+    {
+        "party":"Forecast",
+        "yrs":"8"
+    }
+]

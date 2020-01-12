@@ -9,6 +9,9 @@ body {
   top:1000px;
   position:absolute;
 }*/
+#xtextgood {
+  fill: rgb(37, 158, 0);
+}
 .y.axisRight text {
     fill: steelblue;
 }
@@ -21,10 +24,10 @@ body {
   stroke: #000;
   shape-rendering: crispEdges;
 }
-.bar1.good {
+rect.good {
   fill: rgb(37, 158, 0);
 }
-.bar1.bad {
+rect.bad {
   fill: rgb(184, 5, 5);
 }
 .bar2.good {
@@ -57,6 +60,7 @@ body {
 .bar2:hover {
   fill: steelblue;
 }
+
 .x.axis path {
   display: none;
 }
@@ -97,8 +101,10 @@ body {
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 <script src="https://d3js.org/d3-array.v2.min.js"></script>
 <script src="presidentChart.js"></script>
+<script src="partyChart.js"></script>
 <script src="largeChart.js"></script>
 <script>
   //generateLargeChart();
-  generatePresidentChart();
+  //generatePresidentChart();
+  generatePartyChart();
 </script>

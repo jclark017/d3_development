@@ -127,7 +127,6 @@ d3.csv("budget.csv", type, function(error, dataProto) {
     .attr("dy", ".35em")
     .attr("transform", "rotate(90)")
 
-
   // paint the axis for presidents
   let xAxisPresPaint = svg.append("g")
     .attr("class", "xPres axis")
@@ -148,29 +147,35 @@ d3.csv("budget.csv", type, function(error, dataProto) {
 
 
   svg.append("g")
-	  .attr("class", "y axis axisLeft")
-	  .attr("transform", "translate(0,0)")
-	  .call(yAxisLeft)
-	  .append("text")
-    .attr("y", -10)
-    .attr("x",0 - (height / 2))
-    .style("text-anchor", "middle")
-    .style("font-size","18px")
-    .attr("transform", "rotate(-90)")
-	  .attr("dy", "-2em")
-	  .text("Yearly Change in Deficit (Billions)");
-	
+        .attr("class", "y axis axisLeft")
+        .attr("transform", "translate(0,0)")
+        .attr("id", "xtext")
+        .call(yAxisLeft)
+        .append("text")
+        .attr("y", -10)
+        .attr("x",0 - (height / 2))
+        .style("text-anchor", "middle")
+        .style("font-size","18px")
+        .attr("transform", "rotate(-90)")
+        .attr("dy", "-2em")
+        .text("Yearly Change in Deficit (Billions)");
+      
   svg.append("g")
-	  .attr("class", "y axis axisRight")
-	  .attr("transform", "translate(" + (width) + ",0)")
-	  .call(yAxisRight)
-	  .append("text")
-    .attr("y", 60)
-    .attr("x",0 - (height / 2))
-    .style("text-anchor", "middle")
-    .style("font-size","18px")
-    .attr("transform", "rotate(-90)")
-    .text("Total Annual Deficit (Billions)");
+        .attr("class", "y axis axisRight")
+        .attr("transform", "translate(" + (width) + ",0)")
+        .attr("id", "xtext")
+        .call(yAxisRight)
+        .append("text")
+        .attr("y", 60)
+        .attr("x",0 - (height / 2))
+        .style("text-anchor", "middle")
+        .style("font-size","18px")
+        .attr("transform", "rotate(-90)")
+        .text("Total Annual Deficit (Billions)");
+
+        //Paint the axis text color
+        svg.selectAll("#xtext g text")
+            .attr("id", function(d){if (d <= 0) {return "xtextgood"}})
 
     // Paint President background bars
   iPres = 0
