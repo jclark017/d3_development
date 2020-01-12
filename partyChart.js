@@ -2,9 +2,7 @@ function generatePartyChart () {
   // Set margins for main chart
   var margin = { top: 20, right: 20, bottom: 90, left: 30 },
     width = 200 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom,
-    chartHeight = 400,
-    iPres = 0
+    height = 300 - margin.top - margin.bottom
 
   //President x axis
   //Get data
@@ -25,7 +23,7 @@ function generatePartyChart () {
     var yAxisLeft = d3.svg
       .axis()
       .scale(yAxisScale)
-      .ticks(16)
+      .ticks(8)
       .orient('left')
 
     var xAxisParty = d3.svg
@@ -53,18 +51,16 @@ function generatePartyChart () {
       .call(yAxisLeft)
       .append('text')
       .attr('y', -10)
-      .attr('x', 0 - height / 2)
+      .attr('x', 0 - height / 1.5)
       .style('text-anchor', 'middle')
       .style('font-size', '14px')
       .attr('transform', 'rotate(-90)')
       .attr('dy', '-2em')
       .text('Average Annual Change in Deficit(Surplus)')
 
-    svg.selectAll('#ytext g text').attr('id', function (d) {
-      if (d <= 0) {
-        return 'xtextgood'
-      }
-    })
+      svg.selectAll('#ytext g text').attr('id', function (d) {
+        return d <= 0 ? 'xtextgood' : "xtextbad";
+      })
 
     // paint the x axis for presidents
     let xAxisPresPaint = svg
@@ -72,15 +68,17 @@ function generatePartyChart () {
       .attr('class', 'xPres axis')
       .attr(
         'transform',
-        'translate(' + margin.left + ',' + (height + margin.bottom) + ')'
+        'translate(5,' + (height) + ')'
       )
       .call(xAxisParty)
       .selectAll('text')
-      .attr('y', 0)
-      .attr('x', 50)
+      .attr('y', 25)
+      .attr('x', -50)
       .attr('transform', 'rotate(-90)')
       .style('text-anchor', 'middle')
       .attr('dy', '.35em')
+
+      svg.selectAll("g.xPres path").remove()
 
     // Paint President bars
     iPres = 0

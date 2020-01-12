@@ -3,42 +3,56 @@
         "Name":"Ronald Reagan",
         "img":"regan.png",
         "yrs":8,
-        "party":"Republican"
+        "party":"Republican",
+        "startFiscalYear":1982,
+        "endFiscalYear":1989
     },
     {
         "Name":"George H. W. Bush",
         "img":"regan.png",
         "yrs":4,
-        "party":"Republican"
+        "party":"Republican",
+        "startFiscalYear":1990,
+        "endFiscalYear":1993
     },
     {
         "Name":"Bill Clinton",
         "img":"regan.png",
         "yrs":8,
-        "party":"Democrat"
+        "party":"Democrat",
+        "startFiscalYear":1994,
+        "endFiscalYear":2001
     },
     {
         "Name":"George W. Bush",
         "img":"regan.png",
         "yrs":8,
-        "party":"Republican"
+        "party":"Republican",
+        "startFiscalYear":2002,
+        "endFiscalYear":2009
     },
     {
         "Name":"Barack Obama",
         "img":"regan.png",
         "yrs":8,
-        "party":"Democrat"
+        "party":"Democrat",
+        "startFiscalYear":2010,
+        "endFiscalYear":2017
     },
     {
         "Name":"Donald Trump",
         "img":"regan.png",
         "yrs":4,
-        "party":"Republican"
+        "party":"Republican",
+        "startFiscalYear":2018,
+        "endFiscalYear":2021
     },
     {
         "Name":"Forecast",
         "img":"regan.png",
         "yrs":8,
-        "party":"Forecast"
+        "party":"Forecast",
+        "startFiscalYear":2022,
+        "endFiscalYear":2028
     }
 ]

@@ -1,9 +1,9 @@
 function generateLargeChart () {
   // Set margins for main chart
-  var margin = { top: 0, right: 80, bottom: 0, left: 80 },
-    width = 1400 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom,
-    chartHeight = 600,
+  var margin = { top: 20, right: 80, bottom: 20, left: 80 },
+    width = 800 - margin.left - margin.right,
+    chartHeight = 300,
+    height = chartHeight - margin.top - margin.bottom,
     iPres = 0
 
   // Year x Axis
@@ -22,12 +22,6 @@ function generateLargeChart () {
         return d.Name
       })
     )
-    /*.range(presData.map(function (d, i) {
-        iPres += d.yrs*10;
-        console.log(d3.sum(presData, function(d) { return d.yrs; }));
-        console.log(d.Name + ":" + (iPres)); 
-        return iPres; 
-      }))*/
 
     var xAxisPres = d3.svg
       .axis()
@@ -59,39 +53,23 @@ function generateLargeChart () {
             ChgDescription = 'decrease'
           }
         }
-        var ret =
-          "<strong>Fiscal Year:</strong> <span style='color:white'>" +
-          d.Year +
-          '</span>'
-        ret =
-          ret +
-          '<br/><strong>' +
-          d.Year +
-          ' ' +
-          NetDescription +
-          ":</strong> <span style='color:white'>$" +
-          Math.abs(d.Net) +
-          'bn</span>'
-        ret =
-          ret +
-          '<br/><strong>' +
-          NetDescription +
-          " Change:</strong> <span style='color:white'>$" +
-          Math.abs(d.ChangeFromPreceding_Net) +
-          'bn ' +
-          ChgDescription +
-          '</span>'
+        var ret = "<strong>Fiscal Year:</strong> <span style='color:white'>" + d.Year + '</span>'
+        ret += "<br/><strong>President:</strong> <span style='color:white'>" + d.President + '</span>'
+        ret += '<br/><strong>' + d.Year + ' ' + NetDescription + ":</strong> <span style='color:white'>$" +
+          Math.abs(d.Net) + 'bn</span>'
+        ret += '<br/><strong>' + NetDescription + " Change:</strong> <span style='color:white'>$" + Math.abs(d.ChangeFromPreceding_Net) +
+          'bn ' + ChgDescription  + '</span>'
         return ret
       })
 
     // create left axis scales
     var yAxisScale = d3.scale
       .linear()
-      .domain([800, 1100])
+      .domain([800, 1100]) //Changed later
       .range([height, 0])
     var yScale = d3.scale
       .linear()
-      .domain([20, 80])
+      .domain([20, 80]) //Changed later
       .range([height, 0])
     // create left yAxis
     var yAxisLeft = d3.svg
@@ -103,11 +81,11 @@ function generateLargeChart () {
     // create left axis scales
     var yAxisScaleRight = d3.scale
       .linear()
-      .domain([800, 1100])
+      .domain([800, 1100]) //Change later
       .range([height, 0])
     var yScaleRight = d3.scale
       .linear()
-      .domain([20, 80])
+      .domain([20, 80]) //Change later
       .range([height, 0])
     // create right yAxis
     var yAxisRight = d3.svg
@@ -120,10 +98,11 @@ function generateLargeChart () {
       .select('body')
       .append('svg')
       .attr('width', width + margin.left + margin.right)
-      .attr('height', chartHeight + 500)
+      .attr('height', chartHeight * 1.75)
+      .attr('id', 'svg')
       .append('g')
       .attr('class', 'graph')
-      .attr('transform', 'translate(' + margin.left + ',' + '80' + ')')
+      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
     svg.call(tip)
 
@@ -138,7 +117,12 @@ function generateLargeChart () {
             currentObject.ChangeFromPreceding_Net
           ),
           Change_Net: parseFloat(currentObject.Change_Net),
-          TotalDebt: parseFloat(currentObject.TotalDebt)
+          TotalDebt: parseFloat(currentObject.TotalDebt),
+          PresidentParty: currentObject.PresidentParty,
+          SenateMajorityParty: currentObject.SenateMajorityParty,
+          HouseMajorityParty: currentObject.HouseMajorityParty,
+          President: currentObject.President,
+          SuperMajority: currentObject.SuperMajority
         }
       })
 
@@ -150,18 +134,12 @@ function generateLargeChart () {
 
       xPres.range(
         presData.map(function (d, i) {
-          //iPres += d.yrs;
           var xPresWid =
-            width *
+            (width-12) *
             (iPres /
               d3.sum(presData, function (d) {
                 return d.yrs
               }))
-          console.log(
-            d3.sum(presData, function (d) {
-              return d.yrs
-            })
-          )
           console.log(d.Name + ':' + xPresWid)
           iPres += d.yrs
           return xPresWid
@@ -233,7 +211,7 @@ function generateLargeChart () {
         .attr('class', 'x axis')
         .attr(
           'transform',
-          'translate(-12,' +
+          'translate(-7,' +
             (chartHeight -
               yScale(
                 d3.min(data, function (d) {
@@ -244,7 +222,7 @@ function generateLargeChart () {
         ) //" + chartHeight + ")")
         .call(xAxis)
         .selectAll('text')
-        .attr('y', -14)
+        .attr('y', -7)
         .attr('x', 25)
         .attr('dy', '.35em')
         .attr('transform', 'rotate(90)')
@@ -255,7 +233,7 @@ function generateLargeChart () {
         .attr('class', 'xPres axis')
         .attr(
           'transform',
-          'translate(14,' +
+          'translate(0,' +
             (chartHeight -
               yScale(
                 d3.min(data, function (d) {
@@ -263,18 +241,16 @@ function generateLargeChart () {
                 })
               )) +
             ')'
-        ) //" + chartHeight + ")")
+        ) //" + chartHeight + ")") 
         .call(xAxisPres)
         .selectAll('text')
-        .attr('y', -14)
-        .attr('x', 50)
-        .style('text-anchor', 'middle')
-        .attr('dy', '.35em')
+        .attr('transform', 'rotate(-90), translate(50,10)')
 
       svg.selectAll('g.xPres g.tick text').attr('font-size', '10')
       svg.selectAll('g.xPres g.tick line').remove()
       svg.selectAll('g.xPres path').remove()
 
+      //paint the left y axis
       svg
         .append('g')
         .attr('class', 'y axis axisLeft')
@@ -283,13 +259,14 @@ function generateLargeChart () {
         .call(yAxisLeft)
         .append('text')
         .attr('y', -10)
-        .attr('x', 0 - height / 2)
+        .attr('x', 0 - height / 1.5)
         .style('text-anchor', 'middle')
         .style('font-size', '18px')
         .attr('transform', 'rotate(-90)')
         .attr('dy', '-2em')
-        .text('Yearly Change in Deficit (Billions)')
+        .text('Yearly Change in Deficit (Surplus)')
 
+      //paint the right y axis
       svg
         .append('g')
         .attr('class', 'y axis axisRight')
@@ -298,19 +275,16 @@ function generateLargeChart () {
         .call(yAxisRight)
         .append('text')
         .attr('y', 60)
-        .attr('x', 0 - height / 2)
+        .attr('x', 0 - height / 1.5)
         .style('text-anchor', 'middle')
         .style('font-size', '18px')
         .attr('transform', 'rotate(-90)')
-        .text('Total Annual Deficit (Billions)')
+        .text('Total Annual Deficit (Surplus)')
 
       //Paint the axis text color
       svg.selectAll('#xtext g text').attr('id', function (d) {
-        if (d <= 0) {
-          return 'xtextgood'
-        }
+        return d <= 0 ? 'xtextgood' : "xtextbad";
       })
-
       // Paint President background bars
       iPres = 0
       barsPres = svg
@@ -320,30 +294,22 @@ function generateLargeChart () {
       barsPres
         .append('rect')
         .attr('class', 'barPres')
+        .attr('transform', 'translate(0,0)')
         .attr('class', function (d) {
           return 'barPres ' + d.party
         })
-        .attr('x', function (d, i) {
-          if (i == 0) {
-            return xPres(d.Name) + 13
-          } else {
-            return xPres(d.Name) + 14
-          }
-        })
-        .attr('y', 600) //animated later
+        .attr('x', function (d, i) {return x(d.startFiscalYear);})
+        .attr('y', yAxisScale()[yScale.length - 1]) //animated later
         .attr('width', function (d, i) {
-          if (i == 0) {
-            return xPres.range()[i + 1] - xPres.range()[i] - 1
-          } else {
-            if (isNaN(xPres.range()[i + 1])) {
-              return width - xPres.range()[i] - 20
+            // calculate width. Account for last year, where there is no x value to rely on from the next year
+            if (x(d.endFiscalYear+1) === undefined) {
+                // If there is no next year, just tack on the difference between the last two years
+                return x(d.endFiscalYear) + (x(d.endFiscalYear)-x(d.endFiscalYear-1)) - x(d.startFiscalYear)-1;
             } else {
-              return xPres.range()[i + 1] - xPres.range()[i] - 1
+                return x(d.endFiscalYear+1) - x(d.startFiscalYear)-1;
             }
-          }
-          //xPres(d.Name[i+1]);
         })
-        .attr('height', 100) //animated later
+        .attr('height', 0) //animated later
 
       // Paint the deficit change bars
       bars = svg
@@ -369,7 +335,7 @@ function generateLargeChart () {
         .attr('x', function (d) {
           return x(d.Year)
         })
-        .attr('y', 600) //animated later
+        .attr('y', yAxisScale(0)) //animated later
         .attr('width', x.rangeBand())
         .attr('height', 0) //animated later
         //tooltips
@@ -393,7 +359,7 @@ function generateLargeChart () {
         .attr('class', 'line')
         .attr('id', 'actual')
         .attr('stroke', 'steelblue')
-        .attr('stroke-width', 5)
+        .attr('stroke-width', 3)
         .style('opacity', '0') //Set invisible initially
         .attr(
           'd',
@@ -414,7 +380,7 @@ function generateLargeChart () {
         .style('stroke-dasharray', '3, 3')
         .style('opacity', '0') //Set invisible initially
         .attr('stroke', 'steelblue')
-        .attr('stroke-width', 5)
+        .attr('stroke-width', 3)
         .attr(
           'd',
           lineFunction(
@@ -424,13 +390,33 @@ function generateLargeChart () {
           )
         )
 
+      //draw the year counter
+      svg
+        .append('text')
+        .attr('id', 'counter')
+        .text('')
+        .attr("x",40)
+        .attr("y",40);
+
+      //Animation for the year counter
+      setTimeout(() => {
+        data.forEach((element, i) => {
+          setTimeout(() => {
+            cntVal = element.Year < 2021 ? element.Year : element.Year < 2028 ? element.Year + " (Forecast)" : ""
+            svg.select('#counter').text(cntVal);
+            
+          }, i * 100)
+        })
+      }, 1000)
+
+      console.log(yAxisScale.domain()[yAxisScale.domain().length - 1])
       //Animation for Presidents
       svg
         .selectAll('rect.barPres')
         .transition()
         .duration(500)
         .attr('y', 0)
-        .attr('height', height / 0.71)
+        .attr('height', 425 )
         .delay(function (d, i) {
           return i * 100
         })
@@ -457,7 +443,7 @@ function generateLargeChart () {
       // Then highlight the main line to be fully visable and give it a thicker stroke
       d3.select('#actual')
         .style('opacity', '1')
-        .style('stroke-width', 5)
+        .style('stroke-width', 3)
 
       // First work our the total length of the line
       var totalLength = d3

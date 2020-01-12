@@ -4,24 +4,37 @@
 body {
   font: 10px sans-serif;
 }
+#svg {
+  left:0px;
+  top:80px;
+  position:absolute;
+}
 #svg1 {
-  left:80px;
-  top:1000px;
+  left:20px;
+  top:610px;
   position:absolute;
 }
 #svg2 {
-  left:520px;
-  top:1000px;
+  left:550px;
+  top:610px;
+  position:absolute;
+}
+#legend {
+  left:820px;
+  top:60px;
   position:absolute;
 }
 #xtextgood {
   fill: rgb(37, 158, 0);
 }
+#xtextbad {
+  fill: rgb(184, 5, 5);
+}
 .y.axisRight text {
     fill: steelblue;
 }
 .y.axisLeft text {
-    fill: red;
+    fill:  steelblue;
 }
 .axis path,
 .axis line {
@@ -69,7 +82,12 @@ rect.bad {
 .x.axis path {
   display: none;
 }
-
+text#counter {
+  font-size: 34px;
+  font-weight: 700;
+  fill: steelblue;
+  opacity: .5
+}
 .d3-tip {
   line-height: 1;
   font-weight: bold;
@@ -99,8 +117,80 @@ rect.bad {
   left: 0;
 }
 
+/* Style text and titles */
+span#mainTitle {
+  position:absolute;
+  top:5px;
+  left:5px;
+  padding: 5px;
+  width: 100%;
+  height: 30px;
+  font-size: 20px;
+  color: white;
+  background: steelblue;
+}
+span#chartTitle1 {
+  position:absolute;
+  top:65px;
+  left:240px;
+  padding: 5px;
+  width: 100%;
+  height: 30px;
+  font-size: 20px;
+  color:steelblue;
+}
+span#chartTitle2 {
+  position:absolute;
+  top:570px;
+  left:50px;
+  padding: 5px;
+  width: 100%;
+  height: 30px;
+  font-size: 16px;
+  color:steelblue;
+}
+span#chartTitle3 {
+  position:absolute;
+  top:570px;
+  left:550px;
+  padding: 5px;
+  width: 100%;
+  height: 30px;
+  font-size: 16px;
+  color:steelblue;
+}
+div#methodology {
+  position:absolute;
+  top:200px;
+  left:850px;
+  padding: 5px;
+  width: 250px;
+  height: 30px;
+  font-size: 12px;
+  color:steelblue;
+}
 </style>
 <body>
+  <span id="mainTitle">Which Modern President Led the Most Fiscally Responsible Government?</span>
+  <span id="chartTitle1">Change in Deficit (Surplus) by Year</span>
+  <span id="chartTitle2">Average Annual Change in Deficit (Surplus) by President</span>
+  <span id="chartTitle3">Average Annual Change in Deficit (Surplus) by Party</span>
+  <div id="methodology">
+    <li>All figures in billions of dollars</li>
+    <li>Up is bad, down is good</li>
+    <li>Presidents are attributed to fiscal years that begin during their term</li>
+    <li>Data Source: Congressional Budget Office (cbo.gov) </li>
+  </div>
+  <svg id = legend width="400" height="130">
+    <rect width="300" height="120" style="fill:none;stroke-width:3;stroke:steelblue" ></rect>
+    <text x=10 y=20 style="font-size: 18px; font-weight:bold; fill:steelblue;">Legend</text>
+    <line x1="20" y1="40" x2="60" y2="40" style="stroke:steelblue;stroke-width:5" />
+    <text x=80 y=45 style="font-size: 14px;">Total Annual Deficit (Surplus)</text>
+    <rect x=25 y=65 width="10" height="10" style="fill:rgb(37, 158, 0);;stroke-width:3;stroke:rgb(37, 158, 0)" ></rect>
+    <text x=80 y=75 style="font-size: 14px;">Decrease in Annual Deficit</text>
+    <rect x=25 y=95 width="10" height="10" style="fill:rgb(184, 5, 5);;;stroke-width:3;stroke:rgb(184, 5, 5);" ></rect>
+    <text x=80 y=105 style="font-size: 14px;">Increase in Annual Deficit</text>
+  </svg>
 </body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
