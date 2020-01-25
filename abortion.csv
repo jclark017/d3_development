@@ -1,0 +1,37 @@
+﻿"Year","occurences","occurencesPer1000Live","changeFromPreceding","PresidentParty","SenateMajorityParty","HouseMajorityParty","President","SuperMajority"
+1981,1300760,358,-1,"Republican","Republican","Democrat","Ronald Reagan",0
+1982,1303980,354,-4,"Republican","Republican","Democrat","Ronald Reagan",0
+1983,1268987,349,-5,"Republican","Republican","Democrat","Ronald Reagan",0
+1984,1333521,364,15,"Republican","Republican","Democrat","Ronald Reagan",0
+1985,1328570,354,-10,"Republican","Republican","Democrat","Ronald Reagan",0
+1986,1328112,354,0,"Republican","Republican","Democrat","Ronald Reagan",0
+1987,1353671,356,2,"Republican","Democrat","Democrat","Ronald Reagan",0
+1988,1371285,352,-4,"Republican","Democrat","Democrat","Ronald Reagan",0
+1989,1396658,346,-6,"Republican","Democrat","Democrat","George H. W. Bush",0
+1990,1429247,345,-1,"Republican","Democrat","Democrat","George H. W. Bush",0
+1991,1388937,339,-6,"Republican","Democrat","Democrat","George H. W. Bush",0
+1992,1359145,335,-4,"Republican","Democrat","Democrat","George H. W. Bush",0
+1993,1330414,321,-14,"Democrat","Democrat","Democrat","Bill Clinton",1
+1994,1267415,334,13,"Democrat","Democrat","Democrat","Bill Clinton",1
+1995,1210883,311,-23,"Democrat","Republican","Republican","Bill Clinton",0
+1996,1221585,314,3,"Democrat","Republican","Republican","Bill Clinton",0
+1997,1186039,274,-40,"Democrat","Republican","Republican","Bill Clinton",0
+1998,884273,264,-10,"Democrat","Republican","Republican","Bill Clinton",0
+1999,861789,256,-8,"Democrat","Republican","Republican","Bill Clinton",0
+2000,857475,246,-10,"Democrat","Republican","Republican","Bill Clinton",0
+2001,853485,246,0,"Republican","Republican","Republican","George W. Bush",1
+2002,854122,246,0,"Republican","Republican","Republican","George W. Bush",1
+2003,848163,241,-5,"Republican","Republican","Republican","George W. Bush",1
+2004,839226,238,-3,"Republican","Republican","Republican","George W. Bush",1
+2005,820151,233,-5,"Republican","Republican","Republican","George W. Bush",1
+2006,852385,236,3,"Republican","Republican","Republican","George W. Bush",1
+2007,827609,231,-5,"Republican","Democrat","Democrat","George W. Bush",0
+2008,825564,234,3,"Republican","Democrat","Democrat","George W. Bush",0
+2009,789507,227,-7,"Democrat","Democrat","Democrat","Barack Obama",1
+2010,765651,228,1,"Democrat","Democrat","Democrat","Barack Obama",1
+2011,730322,219,-9,"Democrat","Democrat","Republican","Barack Obama",0
+2012,699202,210,-9,"Democrat","Democrat","Republican","Barack Obama",0
+2013,664435,200,-10,"Democrat","Democrat","Republican","Barack Obama",0
+2014,652639,193,-7,"Democrat","Democrat","Republican","Barack Obama",0
+2015,638169,188,-5,"Democrat","Republican","Republican","Barack Obama",0
+2016,623471,158,-30,"Democrat","Republican","Republican","Barack Obama",0
