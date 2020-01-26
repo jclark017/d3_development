@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+  <meta property="og:title" content="Which Modern President Led the Most Fiscally Responsible Government?" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://jclark017.github.io/d3_development/federalbudget.html" />
+  <meta property="og:image" content="https://jclark017.github.io/d3_development/deficitPreview.png" />
+  <meta property="og:image:secure_url" content="https://jclark017.github.io/d3_development/deficitPreview.png" />
+  <meta property="og:image:width" content="1124" />
+  <meta property="og:image:height" content="566" />
+  <meta property="og:image:alt" content="Chart showing federal deficit history by president" />
+  <meta property="og:description" content="Chart showing federal deficit history by president, year, party" />
+  <meta property="fb:app_id" content="1809823809152851" />
+<style>
+body {
+  font: 10px sans-serif;
+}
+#svg {
+  left:0px;
+  top:80px;
+  position:absolute;
+}
+
+  
+.land {
+ 	fill: white;
+  opacity: .5;
+  stroke: #4f2291;
+  stroke-opacity: 1;
+}
+
+.countries path {
+  stroke: #4f2291;  
+  stroke-linejoin: round;
+  stroke-width:.5;
+  fill: #4f2291;
+  opacity: .1;
+  pointer-events:none;
+}
+  
+.lines path {
+  fill: none;
+  stroke: #4f2291;
+  stroke-opacity: 0.3;
+  /*stroke-dasharray: 5,5; */
+}
+  
+circle {
+  stroke: #4f2291;
+}
+  
+.graticule {
+  fill: none;
+  stroke: #4f2291;
+  stroke-width:.5;
+  opacity:.2;
+}
+
+.labels {
+  font: 8px sans-serif;
+  fill: black;
+  opacity: 1;
+  cursor: pointer;
+}
+
+.noclicks {
+  pointer-events:none;
+}
+
+.point {
+  opacity:.6;
+}
+
+/* Style text and titles */
+span#mainTitle {
+  position:absolute;
+  top:5px;
+  left:5px;
+  padding: 5px;
+  width: 100%;
+  height: 30px;
+  font-size: 20px;
+  color: white;
+  background: steelblue;
+}
+</style>
+</head>
+<body>
+  <span id="mainTitle">My Google Location History</span>
+</body>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/d3-array.v2.min.js"></script>
+<script src="https://d3js.org/topojson.v0.min.js"></script>
+<script src="https://d3js.org/d3-polygon.v1.min.js"></script>
+<script src="https://d3js.org/queue.v1.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+<script src="https://unpkg.com/versor"></script>
+<script src="https://unpkg.com/topojson-server@3"></script>
+<script src="https://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<script src="historymapGlobe.js"></script>
+<!-- <script src="historymapGlobe.js"></script> -->
+
