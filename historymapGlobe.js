@@ -19,11 +19,9 @@ var proj = d3.geoOrthographic()
 // change this to 180 for transparent globe
     .clipAngle(90)
     
-
 var path = d3.geoPath().projection(proj).pointRadius(2);
 
 var graticule = d3.geoGraticule();
-  
   
 var time = Date.now();
 var rotate = [39.666666666666664, -30];
@@ -47,14 +45,12 @@ svg.call(d3.drag()
 
 queue()
     .defer(d3.json, "https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba169207548a8a3d670c9c2cc719ff05c47/world-110m.json")
-    .defer(d3.json, "historylocations.json")
     .defer(d3.json, "LocationHistoryMin.json")
     .await(ready);
 
-function ready(error, world, places, places2) {
+function ready(error, world, places) {
 
-    places2 = convertTopo(places2);
-    places = places2;
+    places = convertTopo(places);
 
     svg.append("circle")
         .attr("cx", width / 2)
@@ -92,73 +88,17 @@ function ready(error, world, places, places2) {
         .attr("stroke-dashoffset", "200")//function (d,i) {return d.totalLength})
         .attr("stroke-dasharray",  "200 200") //function (d,i) {return d.totalLength + " " + d.totalLength})
 */
-    
 
-/*
-    svg.append("g").attr("class","labels")
-        .selectAll("text").data(places.features)
-      .enter().append("text")
-      .attr("class", "label")
-      .text(d => d.properties.name)
-      .on("mouseover", (d) => {
-      	var distance = Math.round(d3.geoDistance(d.geometry.coordinates, london) * 6371);
-      	d3.select("g.info").select("text.distance").text("Distance from London: ~" + distance + "km");
-      	var name = stripWhitespace(d.properties.name);
-      	d3.select("g.lines").select("#" + name).style("stroke-opacity", 1)
-    	})
-    	.on("mouseout", (d) => {
-      	var name = stripWhitespace(d.properties.name);
-      	d3.select("g.lines").select("#" + name).style("stroke-opacity", 0.3)
-        d3.select("g.info").select("text.distance").text("Distance from London: Hover Over A Location");
-    	});
-*/  
     svg.append("g").attr("class","countries")
       .selectAll("path")
         .data(topojson.object(world, world.objects.countries).geometries)
       .enter().append("path")
         .attr("d", path); 
 
-    position_labels();
-/*  
-  	svg.append("g").attr("class", "info")
-      .append("text")
-    	.attr("class", "distance")
-      .attr("x", width / 20)
-      .attr("y", height * 0.9)
-    	.attr("text-anchor", "start")
-    	.style("font-size", "12px")
-      .text("Distance from London: Hover Over A Location");  
-  */
   	refresh(lines);
   
   	spin();
-}
-
-
-
-function position_labels() {
-  var centerPos = proj.invert([width/2,height/2]);
-
-  svg.selectAll(".label")
-    .attr("text-anchor", (d) => {
-      var x = proj(d.geometry.coordinates)[0];
-      return x < width/2-20 ? "end" :
-             x < width/2+20 ? "middle" :
-             "start"
-    })
-    .attr("transform", (d) => {
-      var loc = proj(d.geometry.coordinates),
-        x = loc[0],
-        y = loc[1];
-      var offset = x < width/2 ? -5 : 5;
-      return "translate(" + (x+offset) + "," + (y-2) + ")"
-    })
-    .style("display", (d) => {
-      var d = d3.geoDistance(d.geometry.coordinates, centerPos);
-      return (d > 1.57) ? 'none' : 'inline';
-    })
-    
-}
+};
 
 function refresh(lines) {
   svg.selectAll(".land").attr("d", path);
@@ -166,10 +106,9 @@ function refresh(lines) {
   svg.selectAll(".graticule").attr("d", path);
   svg.selectAll(".point").attr("d", path);
   svg.selectAll(".lines").attr("d", (d) => { if (d) { return lineToPrev(d); }});
-/*position_labels();*/
+
 }
 
-  
 var timer;
   
 function spin() {
@@ -226,8 +165,11 @@ function newGeometry(lat, lon) {
     this.coordinates.push(lat/1e7);
 }
 
+//Convert the JSON data freom Google into TopoJSON
 function convertTopo (data) {
     
+    hopLimit = 50 //Only include a new value if it's more than this many km from the previous value
+
     newTopo = JSON.parse('{"type": "FeatureCollection","features": []}');
 
     prevLocation = {}
@@ -250,15 +192,15 @@ function convertTopo (data) {
 
         console.log(crowDist)
 
-        if (crowDist > 50) {
+        if (crowDist > hopLimit) {
             newTopo['features'].push(newFeat);
             prevLocation = data.locations[i];
         }
         
         
     }
-    console.log (newTopo);
-    console.log (JSON.stringify(newTopo));
+    //console.log (newTopo);
+    //console.log (JSON.stringify(newTopo));
 
     return newTopo
 }
