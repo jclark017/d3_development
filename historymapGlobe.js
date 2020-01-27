@@ -11,14 +11,14 @@ function scale() {
 */
 
 
-var width = 1260,
-    height = 900;
+var width = 1440,
+    height = 750;
 
-var proj = d3.geoOrthographic()
-    .scale(360)
+var proj = d3.geoMercator()
+    .scale(width / 2 / Math.PI)
     .translate([width / 2, height / 2])
 // change this to 180 for transparent globe
-    .clipAngle(90)
+    //.clipAngle(90)
 
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
@@ -44,7 +44,7 @@ function stripWhitespace(str) {
 
 var svg = d3.select("body").append("svg")
             .attr("width", width)
-            .attr("height", height)
+            .attr("height", height);
 
 svg.call(d3.drag()
         .on("start", dragstarted)
@@ -61,14 +61,12 @@ function ready(error, world, placesdata) {
 
     places = convertTopo(placesdata);
 
-    console.log(places.features)
-
-    svg.append("circle")
+    /*svg.append("circle")
         .attr("cx", width / 2)
       	.attr("cy", height / 2)
         .attr("r", proj.scale())
         .attr("class", "noclicks")
-    		.attr("fill", "none");
+    		.attr("fill", "none");*/
     
     svg.append("path")
         .datum(topojson.object(world, world.objects.land))
@@ -171,9 +169,10 @@ function spin() {
         //points = points.data(places.features.slice(0,incmnt));
         var points = svg.selectAll("g.points").selectAll("path.point").data(places.features.slice(0,incmnt));
 
-        points.attr("class", "point")
+        points
             .transition()
-            .duration((1*incmnt)+50)
+            .attr("class", "point")
+            .duration((1*incmnt)+300)
             .attr("d", path.pointRadius(2))
 
         points.enter().append("path")
