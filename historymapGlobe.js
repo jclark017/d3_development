@@ -26,6 +26,8 @@ var graticule = d3.geoGraticule();
 var time = Date.now();
 var rotate = [39.666666666666664, -30];
 var velocity = [.015, -0];
+//var points
+var lines
   
 var lineToPrev = function(d) {
   return path({"type": "LineString", "coordinates": [d.properties.prevCoordinates, d.geometry.coordinates]});
@@ -45,12 +47,16 @@ svg.call(d3.drag()
 
 queue()
     .defer(d3.json, "https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba169207548a8a3d670c9c2cc719ff05c47/world-110m.json")
-    .defer(d3.json, "LocationHistoryMin.json")
+    .defer(d3.json, "LocationHistory.json")
     .await(ready);
 
-function ready(error, world, places) {
+function ready(error, world, placesdata) {
 
-    places = convertTopo(places);
+    proj.rotate([100 , -40]);
+
+    places = convertTopo(placesdata);
+
+    console.log(places.features)
 
     svg.append("circle")
         .attr("cx", width / 2)
@@ -70,13 +76,13 @@ function ready(error, world, places) {
         .attr("d", path);
 
     svg.append("g").attr("class","points")
-        .selectAll("text").data(places.features)
+        .selectAll("text").data(places.features.slice(0,1))
       .enter().append("path")
         .attr("class", "point")
         .attr("d", path);
   
-  	var lines = svg.append("g").attr("class","lines")
-        .selectAll(".lines").data(places.features)
+  	lines = svg.append("g").attr("class","lines")
+        .selectAll(".lines").data(places.features.slice(0,1))
         .enter().append("path")
         .attr("class", "lines")
     	.attr("id", d => stripWhitespace(d.properties.name))
@@ -95,12 +101,12 @@ function ready(error, world, places) {
       .enter().append("path")
         .attr("d", path); 
 
-  	refresh(lines);
+  	refresh();
   
   	spin();
 };
 
-function refresh(lines) {
+function refresh() {
   svg.selectAll(".land").attr("d", path);
   svg.selectAll(".countries path").attr("d", path);
   svg.selectAll(".graticule").attr("d", path);
@@ -110,15 +116,69 @@ function refresh(lines) {
 }
 
 var timer;
-  
+var incmnt = 0;
+ 
 function spin() {
-  timer = d3.timer(function() {
+/*
+    places.features.forEach(function (df,i) {
+        setTimeout(() => {
+        //if (incmnt <= places.features.length) {
+            
+            points = points.data(places.features.slice(0,i)).enter().append("path")
+                .attr("class", "point")
+                .attr("d", path)
+                .attr("d", path.pointRadius(function(d,ii){
+                    if (ii == i) {return 5} else {return 2};
+                }));
+    
+            lines = lines.data(places.features.slice(0,i))
+                .enter().append("path")
+                .attr("class", "lines")
+                .attr("id", d => stripWhitespace(d.properties.name))
+                .attr("d", d => lineToPrev(d));
+                       
+        //} 
+    } ,1000 * i)
+    });
+*/
+  
+  timer = d3.interval(function() {
     var dt = Date.now() -time;
     
     //proj.rotate([rotate[0] + velocity[0] * dt, rotate[1] + velocity[1] * dt]);
     
-    refresh();
-  });
+    console.log(places.features.length)
+    if (incmnt <= places.features.length) {
+
+        //points = points.data(places.features.slice(0,incmnt));
+        var points = svg.selectAll("g.points").selectAll("path.point").data(places.features.slice(0,incmnt));
+
+        points.attr("class", "point")
+            .transition()
+            .duration((1*incmnt)+50)
+            .attr("d", path.pointRadius(2))
+
+        points.enter().append("path")
+            .attr("class", "point new")
+            .attr("d", path)
+            .attr("d", path.pointRadius(7));
+            
+
+        lines = lines.data(places.features.slice(0,incmnt));
+
+        lines.enter().append("path")
+            .attr("class", "lines")
+            .attr("id", d => stripWhitespace(d.properties.name))
+            .attr("d", d => lineToPrev(d));
+      
+        incmnt += 1
+
+        //refresh();
+    } else 
+    {timer.stop}
+    
+  },1);
+  
 }
   
 function dragstarted() {
@@ -168,7 +228,7 @@ function newGeometry(lat, lon) {
 //Convert the JSON data freom Google into TopoJSON
 function convertTopo (data) {
     
-    hopLimit = 50 //Only include a new value if it's more than this many km from the previous value
+    hopLimit = 200 //Only include a new value if it's more than this many km from the previous value
 
     newTopo = JSON.parse('{"type": "FeatureCollection","features": []}');
 
@@ -189,8 +249,6 @@ function convertTopo (data) {
                 newFeat.properties.prevCoordinates[1],
                 newFeat.properties.prevCoordinates[0],
                 )
-
-        console.log(crowDist)
 
         if (crowDist > hopLimit) {
             newTopo['features'].push(newFeat);
