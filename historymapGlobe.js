@@ -10,6 +10,7 @@ function scale() {
 }
 */
 
+
 var width = 1260,
     height = 900;
 
@@ -18,7 +19,11 @@ var proj = d3.geoOrthographic()
     .translate([width / 2, height / 2])
 // change this to 180 for transparent globe
     .clipAngle(90)
-    
+
+const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
+
 var path = d3.geoPath().projection(proj).pointRadius(2);
 
 var graticule = d3.geoGraticule();
@@ -115,6 +120,14 @@ function refresh() {
 
 }
 
+//draw the year counter
+svg
+    .append('text')
+    .attr('id', 'counter')
+    .text('')
+    .attr("x",30)
+    .attr("y",100);
+
 var timer;
 var incmnt = 0;
  
@@ -149,6 +162,11 @@ function spin() {
     
     console.log(places.features.length)
     if (incmnt <= places.features.length) {
+
+        // Increment the counter
+
+        cntVal = places.features[incmnt].properties.month + " " + places.features[incmnt].properties.year
+        svg.select('#counter').text(cntVal);
 
         //points = points.data(places.features.slice(0,incmnt));
         var points = svg.selectAll("g.points").selectAll("path.point").data(places.features.slice(0,incmnt));
@@ -204,7 +222,11 @@ function newFeature(location, prevLocation) {
 }
 
 function newProperties(timestamp, prevLocation) {
-    this.time = timestamp;
+    var dte = new Date(parseInt(timestamp));
+
+    this.time = dte;
+    this.month = monthNames[dte.getMonth()];
+    this.year = dte.getFullYear().toString();
     this.name = "";
     this.prevCoordinates = [];
 
