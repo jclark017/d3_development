@@ -24,7 +24,7 @@ const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
   ];
 
-var path = d3.geoPath().projection(proj).pointRadius(2);
+var path = d3.geoPath().projection(proj).pointRadius(2.5);
 
 var graticule = d3.geoGraticule();
   
@@ -52,14 +52,16 @@ svg.call(d3.drag()
 
 queue()
     .defer(d3.json, "https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba169207548a8a3d670c9c2cc719ff05c47/world-110m.json")
-    .defer(d3.json, "LocationHistory.json")
+    .defer(d3.json, "LocationHistoryTrim.json")
     .await(ready);
 
 function ready(error, world, placesdata) {
 
     proj.rotate([100 , -40]);
 
-    places = convertTopo(placesdata);
+    //If it's raw data, need to pare it down first
+    //places = convertTopo(placesdata);
+    places = placesdata
 
     /*svg.append("circle")
         .attr("cx", width / 2)

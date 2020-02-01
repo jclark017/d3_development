@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+  <meta property="og:title" content="Google Location History (2011 - 2020)" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://jclark017.github.io/d3_development/locationhistory/historymap.html" />
+  <meta property="og:image" content="https://jclark017.github.io/d3_development/locationhistory/historymap.png" />
+  <meta property="og:image:secure_url" content="https://jclark017.github.io/d3_development/locationhistory/historymap.png" />
+  <meta property="og:image:width" content="788" />
+  <meta property="og:image:height" content="448" />
+  <meta property="og:image:alt" content="Animated chart of personal location history" />
+  <meta property="og:description" content="Animated chart of personal location history" />
+  <meta property="fb:app_id" content="1809823809152851" />
+<style>
+body {
+  font: 10px sans-serif;
+}
+#svg {
+  left:0px;
+  top:80px;
+  position:absolute;
+}
+
+  
+.land {
+ 	fill: white;
+  opacity: .5;
+  stroke: #4f2291;
+  stroke-opacity: 1;
+}
+
+.countries path {
+  stroke: #4f2291;  
+  stroke-linejoin: round;
+  stroke-width:.5;
+  fill: #4f2291;
+  opacity: .1;
+  pointer-events:none;
+}
+  
+.lines path {
+  fill: none;
+  stroke: #4f2291;
+  stroke-opacity: 0.3;
+  /*stroke-dasharray: 5,5; */
+}
+  
+circle {
+  stroke: #4f2291;
+}
+  
+.graticule {
+  fill: none;
+  stroke: #4f2291;
+  stroke-width:.5;
+  opacity:.2;
+}
+
+.labels {
+  font: 8px sans-serif;
+  fill: black;
+  opacity: 1;
+  cursor: pointer;
+}
+
+.noclicks {
+  pointer-events:none;
+}
+
+.point {
+  opacity:.4;
+  stroke: #4f2291;;
+  fill: #4f2291;;
+}
+
+.new {
+  opacity:1;
+  stroke: #736183;
+  fill: #736183;
+}
+
+/* Style text and titles */
+span#mainTitle {
+  position:absolute;
+  top:5px;
+  left:5px;
+  padding: 5px;
+  width: 100%;
+  height: 30px;
+  font-size: 20px;
+  color: white;
+  background: steelblue;
+}
+text#counter {
+  font-size: 34px;
+  font-weight: 700;
+  fill: steelblue;
+  opacity: .7
+}
+</style>
+</head>
+<body>
+  
+  <div id="code"></div>
+</body>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/d3-array.v2.min.js"></script>
+<script src="https://d3js.org/topojson.v0.min.js"></script>
+<script src="https://d3js.org/d3-polygon.v1.min.js"></script>
+<script src="https://d3js.org/queue.v1.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+<script src="https://unpkg.com/versor"></script>
+<script src="https://unpkg.com/topojson-server@3"></script>
+<script src="https://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<!-- <script src="https://jclark017.github.io/d3_development/locationhistory/historymapGlobejson.js"></script> -->
+<script src="historymapGlobejson.js"></script>
+
