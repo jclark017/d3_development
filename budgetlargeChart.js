@@ -16,7 +16,7 @@ function generateLargeChart () {
 
   //President x axis
   //Get data
-  d3.json('data/presidents.json', function (errorPres, presData) {
+  d3.json('https://jclark017.github.io/d3_development/data/presidents.json', function (errorPres, presData) {
     var xPres = d3.scale.ordinal().domain(
       presData.map(function (d) {
         return d.Name
@@ -106,7 +106,7 @@ function generateLargeChart () {
 
     svg.call(tip)
 
-    d3.csv('data/budget.csv', type, function (error, dataProto) {
+    d3.csv('https://jclark017.github.io/d3_development/data/budget.csv', type, function (error, dataProto) {
       //Convert data formats
       var data = dataProto.map(function (currentObject) {
         return {
