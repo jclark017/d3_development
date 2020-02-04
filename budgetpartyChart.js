@@ -6,7 +6,7 @@ function generatePartyChart () {
 
   //President x axis
   //Get data
-  d3.json('party.json', function (errorPres, partyData) {
+  d3.json('data/party.json', function (errorPres, partyData) {
     var xParty = d3.scale
       .ordinal()
       .domain(
@@ -106,7 +106,7 @@ function generatePartyChart () {
       })
 
     // fetch Budget data to paint bars
-    d3.csv('budget.csv', function (error, dataProto) {
+    d3.csv('data/budget.csv', function (error, dataProto) {
       //Convert data formats
       var data = dataProto.map(function (currentObject) {
         return {
