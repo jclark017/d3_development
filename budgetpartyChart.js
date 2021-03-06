@@ -106,7 +106,7 @@ function generatePartyChart () {
       })
 
     // fetch Budget data to paint bars
-    d3.csv('https://jclark017.github.io/d3_development/data/budget.csv', function (error, dataProto) {
+    d3.csv('./data/budget.csv', function (error, dataProto) {
       //Convert data formats
       var data = dataProto.map(function (currentObject) {
         return {

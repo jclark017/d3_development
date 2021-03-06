@@ -106,7 +106,7 @@ function generateLargeChart () {
 
     svg.call(tip)
 
-    d3.csv('https://jclark017.github.io/d3_development/data/budget.csv', type, function (error, dataProto) {
+    d3.csv('./data/budget.csv', type, function (error, dataProto) {
       //Convert data formats
       var data = dataProto.map(function (currentObject) {
         return {
@@ -326,7 +326,7 @@ function generateLargeChart () {
             var chg = 'good'
           }
 
-          if (d.Year > '2019') {
+          if (d.Year > '2020') {
             return 'bar2 ' + chg
           } else {
             return 'bar1 ' + chg
